@@ -18,9 +18,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# -----------------------------
-# LOAD EMBEDDINGS (CACHE)
-# -----------------------------
+
+ # LOAD EMBEDDINGS (CACHE)
+
 @st.cache_resource
 def load_embeddings():
     return HuggingFaceEmbeddings(
@@ -29,9 +29,9 @@ def load_embeddings():
 
 embeddings = load_embeddings()
 
-# -----------------------------
+
 # CLEAN OCR TEXT
-# -----------------------------
+
 def clean_text(text):
 
     text = text.replace("|", " ")
@@ -41,9 +41,8 @@ def clean_text(text):
     return text.strip()
 
 
-# -----------------------------
 # OCR PDF
-# -----------------------------
+
 def extract_text_from_pdf(pdf_path):
 
     pages = convert_from_path(pdf_path)
@@ -63,9 +62,8 @@ def extract_text_from_pdf(pdf_path):
     return data
 
 
-# -----------------------------
 # CHUNKING
-# -----------------------------
+
 def layout_chunking(text, page):
 
     sections = re.split(r'\n\s*\d+\.\s+', text)
@@ -86,9 +84,8 @@ def layout_chunking(text, page):
     return records
 
 
-# -----------------------------
 # CREATE RECORDS
-# -----------------------------
+
 def create_records(ocr_data):
 
     records = []
@@ -105,9 +102,8 @@ def create_records(ocr_data):
     return records
 
 
-# -----------------------------
 # VECTOR DB
-# -----------------------------
+
 def build_vector_db(records):
 
     embeddings = HuggingFaceEmbeddings(
@@ -127,9 +123,8 @@ def build_vector_db(records):
     return db
 
 
-# -----------------------------
 # BM25
-# -----------------------------
+
 def build_bm25(records):
 
     corpus = [r["content"] for r in records]
@@ -139,9 +134,9 @@ def build_bm25(records):
 
     return bm25
 
-    # -----------------------------
+
 # CACHE FULL PDF PROCESSING
-# -----------------------------
+
 @st.cache_resource
 def process_pdf(pdf_path):
 
@@ -155,9 +150,9 @@ def process_pdf(pdf_path):
 
     return vector_db, bm25, records
 
-# -----------------------------
+
 # HYBRID SEARCH
-# -----------------------------
+
 def hybrid_search(query, vector_db, bm25, records):
 
     vector_docs = vector_db.similarity_search(query, k=3)
@@ -172,9 +167,8 @@ def hybrid_search(query, vector_db, bm25, records):
     return vector_docs, keyword_docs
 
 
-# -----------------------------
 # LLM
-# -----------------------------
+
 llm = ChatGroq(model="llama-3.1-8b-instant")
 
 prompt = PromptTemplate.from_template("""
@@ -199,18 +193,17 @@ parser = StrOutputParser()
 chain = prompt | llm | parser
 
 
-# -----------------------------
 # STREAMLIT UI
-# -----------------------------
+
 st.title("📄 Internal Legal Document RAG Assistant")
 
 st.write("Upload a PDF and ask questions about it.")
 
 uploaded_file = st.file_uploader("Upload your PDF", type="pdf")
 
-# -----------------------------
+
 # PROCESS PDF
-# -----------------------------
+
 if uploaded_file:
 
     with st.spinner("Processing PDF..."):
@@ -230,9 +223,9 @@ if uploaded_file:
 
     st.success("PDF processed successfully!")
 
-    # -----------------------------
+    
     # QUESTION INPUT
-    # -----------------------------
+    
     question = st.text_input("Enter your question")
 
     if question:
