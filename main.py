@@ -19,6 +19,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # -----------------------------
+# LOAD EMBEDDINGS (CACHE)
+# -----------------------------
+@st.cache_resource
+def load_embeddings():
+    return HuggingFaceEmbeddings(
+        model_name="BAAI/bge-small-en"
+    )
+
+embeddings = load_embeddings()
+
+# -----------------------------
 # CLEAN OCR TEXT
 # -----------------------------
 def clean_text(text):
@@ -128,6 +139,21 @@ def build_bm25(records):
 
     return bm25
 
+    # -----------------------------
+# CACHE FULL PDF PROCESSING
+# -----------------------------
+@st.cache_resource
+def process_pdf(pdf_path):
+
+    ocr_data = extract_text_from_pdf(pdf_path)
+
+    records = create_records(ocr_data)
+
+    vector_db = build_vector_db(records)
+
+    bm25 = build_bm25(records)
+
+    return vector_db, bm25, records
 
 # -----------------------------
 # HYBRID SEARCH
@@ -176,7 +202,7 @@ chain = prompt | llm | parser
 # -----------------------------
 # STREAMLIT UI
 # -----------------------------
-st.title("📄 Legal Document RAG Chatbot")
+st.title("📄 Internal Legal Document RAG Assistant")
 
 st.write("Upload a PDF and ask questions about it.")
 
