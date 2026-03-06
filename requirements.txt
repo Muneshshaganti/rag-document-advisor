@@ -10,3 +10,7 @@ pypdf
 PyPDF2
 python-dotenv
 torch
+streamlit
+rank-bm25
+pytesseract
+pdf2image
