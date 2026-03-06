@@ -155,7 +155,7 @@ def process_pdf(pdf_path):
 
 def hybrid_search(query, vector_db, bm25, records):
 
-    vector_docs = vector_db.similarity_search(query, k=5)
+    vector_docs = vector_db.similarity_search(query, k=6)
 
     tokenized_query = query.split()
     scores = bm25.get_scores(tokenized_query)
@@ -172,14 +172,19 @@ def hybrid_search(query, vector_db, bm25, records):
 llm = ChatGroq(model="llama-3.1-8b-instant")
 
 prompt = PromptTemplate.from_template("""
-You are a document assistant.
+You are a legal document assistant.
 
-Answer ONLY using the provided context.
+Use ONLY the provided document context to answer the user's question.
 
-If the answer is not present in the context reply:
-"Not enough information in the document."
+Rules:
 
-Do NOT guess or add external knowledge.                                                                  
+1. If the answer exists in the document context, provide a clear and concise answer.
+2. If the answer does NOT exist in the context, respond exactly with:
+   Not enough information in the document.
+3. If the user asks for a summary, provide a summary using only the information available in the context.
+4. If the user asks questions related to the document, answer using only the document content.
+5. Do NOT explain or summarize information that is not present in the document.
+6. Do NOT add external knowledge or assumptions.
 
 Context:
 {context}
