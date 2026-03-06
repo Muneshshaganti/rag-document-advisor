@@ -4,7 +4,7 @@ import streamlit as st
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-from pdf2image import convert_from_path
+from pdf2image import convert_from_path                                 #python -m streamlit run main.py
 import pytesseract
 
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -155,7 +155,7 @@ def process_pdf(pdf_path):
 
 def hybrid_search(query, vector_db, bm25, records):
 
-    vector_docs = vector_db.similarity_search(query, k=3)
+    vector_docs = vector_db.similarity_search(query, k=5)
 
     tokenized_query = query.split()
     scores = bm25.get_scores(tokenized_query)
@@ -178,6 +178,8 @@ Answer ONLY using the provided context.
 
 If the answer is not present in the context reply:
 "Not enough information in the document."
+
+Do NOT guess or add external knowledge.                                                                  
 
 Context:
 {context}
