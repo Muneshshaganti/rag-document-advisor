@@ -176,23 +176,26 @@ groq_api_key = os.getenv("GROQ_API_KEY")
 
 llm = ChatGroq(
     model="llama-3.1-8b-instant",
-    api_key=groq_api_key
+    api_key=groq_api_key,
+    temperature=0
 )
 
 prompt = PromptTemplate.from_template("""
 You are a legal document assistant.
 
-Use ONLY the provided document context to answer the user's question.
+Use ONLY the information from the provided document context.
 
-Rules:
+STRICT RULES:
 
-1. If the answer exists in the document context, provide a clear and concise answer.
+1. If the answer exists in the document context, answer clearly using only that text.
 2. If the answer does NOT exist in the context, respond exactly with:
-   Not enough information in the document.
-3. If the user asks for a summary, provide a summary using only the information available in the context.
-4. If the user asks questions related to the document, answer using only the document content.
-5. Do NOT explain or summarize information that is not present in the document.
-6. Do NOT add external knowledge or assumptions.
+   "Not enough information in the document."
+3. Do NOT use outside knowledge.
+4. Do NOT guess.
+5. Do NOT add explanations beyond the document.
+6. If the user asks for a summary, provide the summary only from the context.
+7. If the context does not contain the requested information, return:
+   "Not enough information in the document."
 
 Context:
 {context}
