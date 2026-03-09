@@ -45,13 +45,16 @@ def clean_text(text):
 
 def extract_text_from_pdf(pdf_path):
 
-    pages = convert_from_path(pdf_path)
+    pages = convert_from_path(
+    pdf_path,
+    dpi=300
+)
 
     data = []
 
     for i, page in enumerate(pages):
 
-        raw_text = pytesseract.image_to_string(page)
+        raw_text = pytesseract.image_to_string(page, lang="eng", config="--psm 6")  
         text = clean_text(raw_text)
 
         data.append({
