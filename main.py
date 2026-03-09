@@ -47,7 +47,7 @@ def extract_text_from_pdf(pdf_path):
 
     pages = convert_from_path(
     pdf_path,
-    dpi=300
+    dpi=150
 )
 
     data = []
