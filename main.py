@@ -172,7 +172,7 @@ def hybrid_search(query, vector_db, bm25, records):
 
 # LLM
 
-groq_api_key = st.secrets.get("GROQ_API_KEY", os.getenv("GROQ_API_KEY"))
+groq_api_key = os.getenv("GROQ_API_KEY")
 
 llm = ChatGroq(
     model="llama-3.1-8b-instant",
