@@ -6,7 +6,7 @@ import warnings
 warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-from pdf2image import convert_from_path                                 #python -m streamlit run main.py
+from pdf2image import convert_from_path                                 
 import pytesseract
 
 from langchain_huggingface import HuggingFaceEmbeddings
