@@ -14,5 +14,5 @@ python-dotenv==1.0.1
 rank-bm25==0.2.2
 
 protobuf==3.20.3
-numpy==1.26.4
+numpy==1.26.0
 pillow==9.5.0
