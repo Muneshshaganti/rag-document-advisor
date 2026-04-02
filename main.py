@@ -1,7 +1,9 @@
 import os
 import re
 import streamlit as st
+import warnings
 
+warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 from pdf2image import convert_from_path                                 #python -m streamlit run main.py
