@@ -16,3 +16,5 @@ rank-bm25==0.2.2
 numpy>=1.26.2
 pillow>=10.0.0
 protobuf>=4.25.0
+pdf2image
+pytesseract
